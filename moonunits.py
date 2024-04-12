@@ -12,23 +12,52 @@ def convert_earth_time_to_lunar(earth_time):
 
     return lunar_time
 
-def calculate_time_difference():
+def calculate_time_difference(birthdate):
+    # Define the birthdate and noon time on that day
+    birth_datetime = datetime.datetime.strptime(birthdate, "%Y-%m-%d")
+    noon_datetime = birth_datetime.replace(hour=12, minute=0, second=0)
+
+    # Calculate the Earth time and Lunar coordinated time at noon on the birth day
+    earth_time_noon = (noon_datetime - datetime.datetime(noon_datetime.year, noon_datetime.month, noon_datetime.day)).total_seconds() / 3600
+    lunar_time_noon = convert_earth_time_to_lunar(earth_time_noon)
+
+    # Calculate the current Earth time
+    current_datetime = datetime.datetime.now()
+    current_time = (current_datetime - datetime.datetime(current_datetime.year, current_datetime.month, current_datetime.day)).total_seconds() / 3600
+
+    # Calculate the difference between Earth and Lunar coordinated time
+    delta = current_time - lunar_time_noon
+
+    return earth_time_noon, lunar_time_noon, delta
+
+def draw_lunar_landscape():
+    landscape = [
+        "    ^    ^    ^    ^    ^  ",
+        "  /   \\/   \\/   \\/   \\/   \\",
+        "/   \\/   \\/   \\/   \\/   \\  ",
+        "\\  /\\  /\\  /\\  /\\  /\\  /  ",
+    ]
+    print("\n".join(landscape))
+
+def main():
     # Prompt the user to enter their birthdate
     while True:
         try:
-            earth_time_str = input("Enter the Earth time (HH:MM:SS): ")
-            earth_time_parts = [int(part) for part in earth_time_str.split(":")]
-            earth_time = earth_time_parts[0] + earth_time_parts[1]/60 + earth_time_parts[2]/3600
+            birthdate = input("Enter your birthdate (YYYY-MM-DD): ")
+            earth_time_noon, lunar_time_noon, delta = calculate_time_difference(birthdate)
             break
         except ValueError:
-            print("Invalid time format. Please enter the time in HH:MM:SS format.")
+            print("Invalid date format. Please enter your birthdate in YYYY-MM-DD format.")
 
-    # Calculate the difference between Coordinated Lunar Time and Earth time
-    lunar_time = convert_earth_time_to_lunar(earth_time)
-    time_difference = lunar_time - earth_time
+    # Display the data using columns
+    print("\n\n")
+    print(f"{'Birthdate':<20}: {birthdate}")
+    print(f"{'Earth Time at Noon':<20}: {earth_time_noon:.6f} hours")
+    print(f"{'Lunar Time at Noon':<20}: {lunar_time_noon:.6f} hours")
+    print(f"{'Delta':<20}: {delta:.6f} hours")
 
-    return time_difference
+    # Draw the lunar landscape
+    draw_lunar_landscape()
 
-# Call the function to calculate the time difference and print the result
-difference = calculate_time_difference()
-print("Time Difference (Coordinated Lunar Time - Earth Time):", difference)
+if __name__ == "__main__":
+    main()
