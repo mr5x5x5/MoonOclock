@@ -12,23 +12,22 @@ def convert_earth_time_to_lunar(earth_time):
 
     return lunar_time
 
-def calculate_time_difference(birthdate):
-    # Define the birthdate and noon time on that day
+def calculate_elapsed_time_delta(birthdate):
+    # Define the birthdate
     birth_datetime = datetime.datetime.strptime(birthdate, "%Y-%m-%d")
-    noon_datetime = birth_datetime.replace(hour=12, minute=0, second=0)
 
-    # Calculate the Earth time and Lunar coordinated time at noon on the birth day
-    earth_time_noon = (noon_datetime - datetime.datetime(noon_datetime.year, noon_datetime.month, noon_datetime.day)).total_seconds() / 3600
-    lunar_time_noon = convert_earth_time_to_lunar(earth_time_noon)
-
-    # Calculate the current Earth time
+    # Calculate the elapsed time since birth in seconds
     current_datetime = datetime.datetime.now()
-    current_time = (current_datetime - datetime.datetime(current_datetime.year, current_datetime.month, current_datetime.day)).total_seconds() / 3600
+    elapsed_time_delta = current_datetime - birth_datetime
 
-    # Calculate the difference between Earth and Lunar coordinated time
-    delta = current_time - lunar_time_noon
+    return elapsed_time_delta.total_seconds()
 
-    return earth_time_noon, lunar_time_noon, delta
+def convert_seconds_to_lunar_time(seconds):
+    # Convert seconds to hours and adjust for the time dilation effect
+    earth_time = seconds / 3600
+    lunar_time = convert_earth_time_to_lunar(earth_time)
+
+    return lunar_time
 
 def draw_lunar_landscape():
     landscape = [
@@ -46,19 +45,17 @@ def main():
     while True:
         try:
             birthdate = input("Enter your birthdate (YYYY-MM-DD): ")
-            birth_datetime = datetime.datetime.strptime(birthdate, "%Y-%m-%d")
-            birthdate_formatted = birth_datetime.strftime("%B %d, %Y")
-            earth_time_noon, lunar_time_noon, delta = calculate_time_difference(birthdate)
+            elapsed_time_seconds = calculate_elapsed_time_delta(birthdate)
+            lunar_time = convert_seconds_to_lunar_time(elapsed_time_seconds)
             break
         except ValueError:
             print("Invalid date format. Please enter your birthdate in YYYY-MM-DD format.")
 
-    # Display the data using columns
-    print("\n\n")
-    print(f"{'Birthdate':<20}: {birthdate_formatted}")
-    print(f"{'Earth Time at Noon':<20}: {earth_time_noon:.6f} hours")
-    print(f"{'Lunar Time at Noon':<20}: {lunar_time_noon:.6f} hours")
-    print(f"{'Elapsed Time Delta':<20}: {delta:.6f} hours")
+    # Display the elapsed time since birth in seconds
+    print(f"Elapsed time since birth: {elapsed_time_seconds} seconds")
+
+    # Display the Lunar coordinated time
+    print(f"Lunar coordinated time: {lunar_time:.6f} hours")
 
     # Draw the lunar landscape
     draw_lunar_landscape()
