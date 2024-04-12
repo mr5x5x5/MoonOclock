@@ -32,10 +32,12 @@ def calculate_time_difference(birthdate):
 
 def draw_lunar_landscape():
     landscape = [
-        "    ^    ^    ^    ^    ^  ",
-        "  /   \\/   \\/   \\/   \\/   \\",
-        "/   \\/   \\/   \\/   \\/   \\  ",
-        "\\  /\\  /\\  /\\  /\\  /\\  /  ",
+        "           ___-------___          ",
+        "      _-~~                 ~~--_  ",
+        "   _-~                           ~-_ ",
+        "  /                                   \\",
+        " /          ____           ____        \\",
+        "/      /   /    \\  \\    /  /    \\   \\  \\",
     ]
     print("\n".join(landscape))
 
@@ -44,6 +46,8 @@ def main():
     while True:
         try:
             birthdate = input("Enter your birthdate (YYYY-MM-DD): ")
+            birth_datetime = datetime.datetime.strptime(birthdate, "%Y-%m-%d")
+            birthdate_formatted = birth_datetime.strftime("%B %d, %Y")
             earth_time_noon, lunar_time_noon, delta = calculate_time_difference(birthdate)
             break
         except ValueError:
@@ -51,10 +55,10 @@ def main():
 
     # Display the data using columns
     print("\n\n")
-    print(f"{'Birthdate':<20}: {birthdate}")
+    print(f"{'Birthdate':<20}: {birthdate_formatted}")
     print(f"{'Earth Time at Noon':<20}: {earth_time_noon:.6f} hours")
     print(f"{'Lunar Time at Noon':<20}: {lunar_time_noon:.6f} hours")
-    print(f"{'Delta':<20}: {delta:.6f} hours")
+    print(f"{'Elapsed Time Delta':<20}: {delta:.6f} hours")
 
     # Draw the lunar landscape
     draw_lunar_landscape()
