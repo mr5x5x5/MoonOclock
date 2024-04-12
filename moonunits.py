@@ -3,22 +3,32 @@
 
 import datetime
 
-def calculate_age_delta():
+def convert_earth_time_to_lunar(earth_time):
+    # Define the time dilation effect due to the weaker gravitational pull of the Moon
+    lunar_time = earth_time - 56e-6
+
+    # Account for the subtle changes in the speed of a lunar clock based on its position on the lunar surface
+    # Calculation for position-dependent speed change can be added here
+
+    return lunar_time
+
+def calculate_time_difference():
     # Prompt the user to enter their birthdate
     while True:
         try:
-            birthdate_str = input("Enter your birthdate (YYYY-MM-DD): ")
-            birthdate = datetime.datetime.strptime(birthdate_str, "%Y-%m-%d")
+            earth_time_str = input("Enter the Earth time (HH:MM:SS): ")
+            earth_time_parts = [int(part) for part in earth_time_str.split(":")]
+            earth_time = earth_time_parts[0] + earth_time_parts[1]/60 + earth_time_parts[2]/3600
             break
         except ValueError:
-            print("Invalid date format. Please enter your birthdate in YYYY-MM-DD format.")
+            print("Invalid time format. Please enter the time in HH:MM:SS format.")
 
-    # Calculate the delta between the birthdate and the current date
-    current_date = datetime.datetime.now()
-    age_delta = current_date - birthdate
+    # Calculate the difference between Coordinated Lunar Time and Earth time
+    lunar_time = convert_earth_time_to_lunar(earth_time)
+    time_difference = lunar_time - earth_time
 
-    return age_delta
+    return time_difference
 
-# Call the function to calculate the age delta and print the result
-delta = calculate_age_delta()
-print("Your age delta:", delta)
+# Call the function to calculate the time difference and print the result
+difference = calculate_time_difference()
+print("Time Difference (Coordinated Lunar Time - Earth Time):", difference)
