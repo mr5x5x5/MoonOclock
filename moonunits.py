@@ -31,12 +31,11 @@ def convert_seconds_to_lunar_time(seconds):
 
 def draw_lunar_landscape():
     landscape = [
-        "           ___-------___          ",
-        "      _-~~                 ~~--_  ",
-        "   _-~                           ~-_ ",
-        "  /                                   \\",
-        " /          ____           ____        \\",
-        "/      /   /    \\  \\    /  /    \\   \\  \\",
+        "           .-~~~-.",
+        "     .-~~~`.'| |`.~~~-.",
+        "   .'~ ~ /`../ | \\..`\\ ~ ~`.",
+        " .~`   .`/ |  | |  | \\`.   `~.",
+        "/`~  .`/  |  | |  | |  \\`.  ~`\\",
     ]
     print("\n".join(landscape))
 
@@ -51,11 +50,13 @@ def main():
         except ValueError:
             print("Invalid date format. Please enter your birthdate in YYYY-MM-DD format.")
 
-    # Display the elapsed time since birth in seconds
-    print(f"Elapsed time since birth: {elapsed_time_seconds} seconds")
+    # Calculate the delta between Earth time and Coordinated Lunar Time
+    delta = elapsed_time_seconds - lunar_time
 
-    # Display the Lunar coordinated time
-    print(f"Lunar coordinated time: {lunar_time:.6f} hours")
+    # Display the output in two columns
+    print(f"{'Time Elapsed (Earth)':<30}: {elapsed_time_seconds:.6f} seconds")
+    print(f"{'Time Elapsed (Lunar)':<30}: {lunar_time:.0f} seconds")
+    print(f"{'Delta':<30}: {delta:.0f}.{int(abs(delta - int(delta)) * 1e6):06d} seconds")
 
     # Draw the lunar landscape
     draw_lunar_landscape()
