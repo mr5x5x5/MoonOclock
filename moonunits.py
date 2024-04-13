@@ -7,7 +7,7 @@ def convert_earth_time_to_lunar(earth_time):
     """
     Convert Earth time to Lunar time considering the time dilation effect due to the weaker gravitational pull of the Moon.
     """
-    lunar_elapsed_time = earth_time - 56e-6
+    lunar_elapsed_time = earth_time - (56e-6 * (earth_time / (24 * 3600)))  # Adjust for the time dilation effect
     return lunar_elapsed_time
 
 def calculate_elapsed_lunar_time(birthdate):
@@ -16,8 +16,8 @@ def calculate_elapsed_lunar_time(birthdate):
     """
     birth_datetime = datetime.datetime.strptime(birthdate, "%Y-%m-%d")
     current_datetime = datetime.datetime.now()
-    elapsed_lunar_time = (current_datetime - birth_datetime).total_seconds()
-    return elapsed_lunar_time
+    elapsed_earth_time = (current_datetime - birth_datetime).total_seconds()
+    return elapsed_earth_time
 
 def draw_lunar_landscape():
     """
@@ -56,3 +56,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
